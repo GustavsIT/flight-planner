@@ -5,15 +5,16 @@ import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.exceptions.FlightNotFoundByIdException;
 import io.codelex.flightplanner.repository.FlightRepository;
 import io.codelex.flightplanner.requests.AddFlightRequest;
-import io.codelex.flightplanner.requests.SearchFlightRequest;
 import io.codelex.flightplanner.responses.PageResultResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 
 @Service
@@ -45,10 +46,6 @@ public class FlightService {
         }
     }
 
-    public void getAllFlights(){
-        flightRepository.getFlightList();
-    }
-
     public synchronized void addFlight(AddFlightRequest addFlightRequest){
         long newFlightId = lastFlightId + 1;
         lastFlightId = newFlightId;
@@ -72,8 +69,8 @@ public class FlightService {
         }
         Flight flight= new Flight(newFlightId,from, to, carrier, departureTime, arrivalTime);
         flightRepository.getFlightList().add(flight);
-
     }
+
     private boolean flightAlreadyExists(AddFlightRequest addFlightRequest) {
         Airport from = addFlightRequest.getFrom();
         Airport to = addFlightRequest.getTo();
@@ -101,34 +98,22 @@ public class FlightService {
         throw new FlightNotFoundByIdException("Flight not found for ID: " + id);
     }
 
-    public PageResultResponse<Airport> searchAirports(String request) {
-        String searchAirport = request.toLowerCase();
-        List<Airport> matchingAirports = flightRepository.getFlightList().stream()
-                .map(Flight::getFrom)
-                .filter(airport -> airport.getCountry().toLowerCase().contains(searchAirport) ||
-                        airport.getCity().toLowerCase().contains(searchAirport) ||
-                        airport.getAirport().toLowerCase().contains(searchAirport))
-                .collect(Collectors.toList());
+    public PageResultResponse<Airport> searchAirports() {
+        List<Flight> flightList = flightRepository.getFlightList();
+        Set<Airport> airportSet = new HashSet<>();
 
-        return new PageResultResponse<>(1, matchingAirports.size(), matchingAirports);
+        for (Flight flight : flightList) {
+            airportSet.add(flight.getFrom());
+            airportSet.add(flight.getTo());
+        }
+
+        List<Airport> airports = new ArrayList<>(airportSet);
+        return new PageResultResponse<>(1, airports.size(), airports);
     }
 
-    public PageResultResponse<Flight> searchFlights(SearchFlightRequest request) {
-        String from = request.getFrom().toLowerCase();
-        String to = request.getTo().toLowerCase();
-        LocalDateTime departureTime = request.getDepartureTime();
-
-        List<Flight> matchingFlights = flightRepository.getFlightList().stream()
-                .filter(flight -> flight.getFrom().getCountry().toLowerCase().contains(from) ||
-                        flight.getFrom().getCity().toLowerCase().contains(from) ||
-                        flight.getFrom().getAirport().toLowerCase().contains(from) ||
-                        flight.getTo().getCountry().toLowerCase().contains(to) ||
-                        flight.getTo().getCity().toLowerCase().contains(to) ||
-                        flight.getTo().getAirport().toLowerCase().contains(to) ||
-                        flight.getDepartureTime().equals(departureTime))
-                .collect(Collectors.toList());
-
-        return new PageResultResponse<>(1, matchingFlights.size(), matchingFlights);
+    public PageResultResponse<Flight> searchFlights() {
+        List<Flight> allFlights = flightRepository.getFlightList();
+        return new PageResultResponse<>(1, allFlights.size(), allFlights);
     }
 
 }

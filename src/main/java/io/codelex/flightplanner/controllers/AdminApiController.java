@@ -36,7 +36,11 @@ public class AdminApiController {
 
     @GetMapping("/flights/{id}")
     public Flight searchFlight(@PathVariable long id){
-        return flightService.searchFlightById(id);
+        try{
+            return flightService.searchFlightById(id);
+        }catch (FlightNotFoundByIdException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 }
