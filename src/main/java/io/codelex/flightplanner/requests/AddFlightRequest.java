@@ -5,7 +5,6 @@ import io.codelex.flightplanner.domain.Airport;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 
 public class AddFlightRequest {
@@ -18,13 +17,13 @@ public class AddFlightRequest {
     @NotBlank
     private String carrier;
     @NotBlank
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime departureTime;
     @NotBlank
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
 
-    public AddFlightRequest(){
+    public AddFlightRequest() {
     }
 
     public Airport getFrom() {

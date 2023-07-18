@@ -2,48 +2,37 @@ package io.codelex.flightplanner.controllers;
 
 import io.codelex.flightplanner.domain.Airport;
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.exceptions.FlightNotFoundByIdException;
-import io.codelex.flightplanner.responses.PageResultResponse;
-import io.codelex.flightplanner.service.FlightService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import io.codelex.flightplanner.requests.SearchFlightRequest;
+import io.codelex.flightplanner.responses.PageResult;
+import io.codelex.flightplanner.service.FlightPlannerService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api")
 public class CustomerApiController {
-    private final FlightService flightService;
+    private final FlightPlannerService flightPlannerService;
 
-    public CustomerApiController(FlightService flightService) {
-        this.flightService = flightService;
+    public CustomerApiController(FlightPlannerService flightPlannerService) {
+        this.flightPlannerService = flightPlannerService;
     }
 
-    @GetMapping("/flights/search")
-    public ResponseEntity<PageResultResponse<Flight>> searchFlights() {
-        PageResultResponse<Flight> flights = flightService.searchFlights();
-        return ResponseEntity.ok(flights);
+    @GetMapping("/airports")
+    public List<Airport> searchAirports(@RequestParam("search") String search) {
+        return flightPlannerService.searchAirport(search);
+    }
+
+    @PostMapping("/flights/search")
+    public PageResult<Flight> searchFlights(SearchFlightRequest searchFlightRequest) {
+        return flightPlannerService.searchFlights(searchFlightRequest);
     }
 
 
     @GetMapping("/flights/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable long id) {
-        try {
-            Flight flight = flightService.searchFlightById(id);
-            return ResponseEntity.ok(flight);
-        } catch (FlightNotFoundByIdException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
-        }
+    public Flight getFlightById(@PathVariable long id) {
+        return flightPlannerService.searchFlightById(id).getFlight();
     }
-
-    @GetMapping("/airports")
-    public ResponseEntity<PageResultResponse<Airport>> searchAirports() {
-        PageResultResponse<Airport> airports = flightService.searchAirports();
-        return ResponseEntity.ok(airports);
-    }
-
-
 
 }
 

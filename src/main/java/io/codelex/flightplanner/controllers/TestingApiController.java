@@ -1,22 +1,19 @@
 package io.codelex.flightplanner.controllers;
 
-import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.service.FlightService;
-import org.springframework.http.ResponseEntity;
+import io.codelex.flightplanner.service.FlightPlannerService;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/testing-api")
 public class TestingApiController {
-    private final FlightService flightService;
+    private final FlightPlannerService flightPlannerService;
 
-    public TestingApiController(FlightService flightService) {
-        this.flightService = flightService;
+    public TestingApiController(FlightPlannerService flightPlannerService) {
+        this.flightPlannerService = flightPlannerService;
     }
 
     @PostMapping("/clear")
     public void clearFlights(){
-        flightService.clearAllFlights();
+        flightPlannerService.clearAllFlights();
     }
 }

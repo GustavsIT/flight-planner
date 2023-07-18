@@ -2,12 +2,12 @@ package io.codelex.flightplanner.responses;
 
 import java.util.List;
 
-public class PageResultResponse<T> {
+public class PageResult<T> {
     private int page;
     private int totalItems;
     private List<T> items;
 
-    public PageResultResponse(int page, int totalItems, List<T> items) {
+    public PageResult(int page, int totalItems, List<T> items) {
         this.page = page;
         this.totalItems = totalItems;
         this.items = items;

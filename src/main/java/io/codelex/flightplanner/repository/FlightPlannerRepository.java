@@ -2,23 +2,25 @@ package io.codelex.flightplanner.repository;
 
 import io.codelex.flightplanner.domain.Flight;
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
 import java.util.List;
 
-
-
 @Repository
-public class FlightRepository {
+public class FlightPlannerRepository {
     private List<Flight> flightList;
 
-    public FlightRepository(List<Flight> allFlights) {
-        this.flightList = allFlights;
+    public FlightPlannerRepository() {
+        this.flightList = new ArrayList<>();
     }
 
-    public List<Flight> getFlightList() {
+    public List<Flight> getFlights() {
         return flightList;
     }
-
+    public void clear(){
+        flightList.clear();
+    }
 }
+
 
 
 

@@ -8,22 +8,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Flight {
-
-    @NotBlank
     private long id;
-    @NotNull
-    @Valid
     private Airport from;
-    @NotNull
-    @Valid
     private Airport to;
-    @NotBlank
     private String carrier;
-    @NotBlank
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime departureTime;
-    @NotBlank
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
 
 
@@ -108,3 +99,4 @@ public class Flight {
                 '}';
     }
 }
+

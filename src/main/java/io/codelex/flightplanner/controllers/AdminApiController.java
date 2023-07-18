@@ -1,46 +1,35 @@
 package io.codelex.flightplanner.controllers;
 
-
 import io.codelex.flightplanner.domain.Flight;
-import io.codelex.flightplanner.exceptions.FlightNotFoundByIdException;
 import io.codelex.flightplanner.requests.AddFlightRequest;
-import io.codelex.flightplanner.service.FlightService;
+import io.codelex.flightplanner.service.FlightPlannerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/admin-api")
 public class AdminApiController {
-    private final FlightService flightService;
+    private final FlightPlannerService flightPlannerService;
 
-    public AdminApiController(FlightService flightService) {
-        this.flightService = flightService;
+    public AdminApiController(FlightPlannerService flightPlannerService) {
+        this.flightPlannerService = flightPlannerService;
     }
 
-
-    @PostMapping("/flights")
+    @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addFlight(@RequestBody AddFlightRequest request) {
-        flightService.addFlight(request);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void deleteFlight(@PathVariable long id) {
-        try {
-            flightService.deleteFlightById(id);
-        } catch (FlightNotFoundByIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    public Flight addFlight(@RequestBody AddFlightRequest addFlightRequest) {
+        return flightPlannerService.addFlight(addFlightRequest);
     }
 
     @GetMapping("/flights/{id}")
-    public Flight searchFlight(@PathVariable long id){
-        try{
-            return flightService.searchFlightById(id);
-        }catch (FlightNotFoundByIdException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    public Flight searchFlight(@PathVariable long id) {
+        return flightPlannerService.searchFlightById(id).getFlight();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFlight(@PathVariable long id) {
+        flightPlannerService.deleteFlightById(id);
     }
 
 }
