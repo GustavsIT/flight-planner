@@ -120,13 +120,11 @@ public class FlightPlannerService {
         return new PageResult<>(1, flights.size(), flights);
     }
 
-    public FlightResponse searchFlightById(long id) {
-        Flight flight = flightPlannerRepository.getFlights().stream()
+    public Flight searchFlightById(long id) {
+        return flightPlannerRepository.getFlights().stream()
                 .filter(f -> f.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found!"));
-
-        return new FlightResponse(flight);
+                .orElse(null);
     }
 
     public synchronized void deleteFlightById(long id) {

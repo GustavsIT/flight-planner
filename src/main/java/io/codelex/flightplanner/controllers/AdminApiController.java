@@ -4,7 +4,9 @@ import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.requests.AddFlightRequest;
 import io.codelex.flightplanner.service.FlightPlannerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/admin-api")
@@ -22,8 +24,12 @@ public class AdminApiController {
     }
 
     @GetMapping("/flights/{id}")
-    public Flight searchFlight(@PathVariable long id) {
-        return flightPlannerService.searchFlightById(id).getFlight();
+    public ResponseEntity<Flight> getFlightById(@PathVariable long id) {
+        Flight flight = flightPlannerService.searchFlightById(id);
+        if (flight == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(flight, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

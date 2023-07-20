@@ -5,6 +5,8 @@ import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
 import io.codelex.flightplanner.responses.PageResult;
 import io.codelex.flightplanner.service.FlightPlannerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -30,9 +32,12 @@ public class CustomerApiController {
 
 
     @GetMapping("/flights/{id}")
-    public Flight getFlightById(@PathVariable long id) {
-        return flightPlannerService.searchFlightById(id).getFlight();
+    public ResponseEntity<Flight> getFlightById(@PathVariable long id) {
+        Flight flight = flightPlannerService.searchFlightById(id);
+        if (flight == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(flight, HttpStatus.OK);
     }
-
 }
 
