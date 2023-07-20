@@ -35,7 +35,6 @@ public class FlightPlannerService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Flight already exists");
             }
             Flight newFlight = createFlight(addFlightRequest);
-            newFlight.setId(generateFlightId());
             flightPlannerRepository.addFlight(newFlight);
             return newFlight;
         }
@@ -59,14 +58,8 @@ public class FlightPlannerService {
 
 
     private boolean validateAddFlightRequest(AddFlightRequest addFlightRequest) {
-        if (validateAirports(addFlightRequest)
-                && validateDateTime(addFlightRequest)
-                && flightAlreadyExists(addFlightRequest)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return validateAirports(addFlightRequest) && validateDateTime(addFlightRequest)
+                && addFlightRequest.getCarrier() != null && !addFlightRequest.getCarrier().isEmpty();
     }
 
     private boolean flightAlreadyExists(AddFlightRequest addFlightRequest) {
