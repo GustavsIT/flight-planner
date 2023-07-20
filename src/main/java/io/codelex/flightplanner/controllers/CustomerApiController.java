@@ -26,7 +26,7 @@ public class CustomerApiController {
     }
 
     @PostMapping("/flights/search")
-    public PageResult<Flight> searchFlights(SearchFlightRequest searchFlightRequest) {
+    public PageResult<Flight> searchFlights(@RequestBody SearchFlightRequest searchFlightRequest) {
         return flightPlannerService.searchFlights(searchFlightRequest);
     }
 

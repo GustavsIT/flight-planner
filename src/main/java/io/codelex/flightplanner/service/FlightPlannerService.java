@@ -102,7 +102,10 @@ public class FlightPlannerService {
         String searchString = search.toLowerCase().trim();
         return flightPlannerRepository.getFlights().stream()
                 .flatMap(flight -> Stream.of(flight.getFrom(), flight.getTo()))
-                .filter(airport -> airport.getAirport().toLowerCase().contains(searchString))
+                .filter(airport -> airport.getAirport().toLowerCase().contains(searchString)
+                        || airport.getCity().toLowerCase().contains(searchString)
+                        || airport.getCountry().toLowerCase().contains(searchString))
+                .distinct()
                 .collect(Collectors.toList());
     }
 
