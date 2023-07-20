@@ -5,7 +5,6 @@ import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
 import io.codelex.flightplanner.requests.AddFlightRequest;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
-import io.codelex.flightplanner.responses.FlightResponse;
 import io.codelex.flightplanner.responses.PageResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -32,10 +32,17 @@ public class AdminApiController {
         return new ResponseEntity<>(flight, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFlight(@PathVariable long id) {
-        flightPlannerService.deleteFlightById(id);
+    @DeleteMapping("/flights/{id}")
+    public ResponseEntity<Flight> deleteFlight(@PathVariable long id) {
+        Flight flightToDelete = flightPlannerService.searchFlightById(id);
+        if (flightToDelete == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        flightPlannerService.deleteFlightById(flightToDelete.getId());
+        return new ResponseEntity<>(flightToDelete, HttpStatus.NO_CONTENT);
     }
 
+
 }
+
+
