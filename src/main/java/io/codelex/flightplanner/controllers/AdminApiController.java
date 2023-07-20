@@ -36,10 +36,10 @@ public class AdminApiController {
     public ResponseEntity<Flight> deleteFlight(@PathVariable long id) {
         Flight flightToDelete = flightPlannerService.searchFlightById(id);
         if (flightToDelete == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        flightPlannerService.deleteFlightById(flightToDelete.getId());
-        return new ResponseEntity<>(flightToDelete, HttpStatus.NO_CONTENT);
+        flightPlannerService.deleteFlightById(id);
+        return new ResponseEntity<>(flightToDelete, HttpStatus.OK);
     }
 
 

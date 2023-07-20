@@ -129,8 +129,16 @@ public class FlightPlannerService {
                 .orElse(null);
     }
 
-    public synchronized void deleteFlightById(long id) {
-        flightPlannerRepository.getFlights().removeIf(flight -> flight.getId() == id);
+    public synchronized boolean deleteFlightById(long id) {
+        Flight flightToDelete = flightPlannerRepository.getFlights().stream()
+                .filter(f -> f.getId() == id)
+                .findFirst()
+                .orElse(null);
+        if (flightToDelete == null) {
+            return false;
+        }
+        flightPlannerRepository.getFlights().remove(flightToDelete);
+        return true;
     }
 
 
