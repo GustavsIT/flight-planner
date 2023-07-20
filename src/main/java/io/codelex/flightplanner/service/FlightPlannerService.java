@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class FlightPlannerService {
     private FlightPlannerRepository flightPlannerRepository;
     private long flightIdCounter =0;
-    private int currentPage = 0;
+
 
     public FlightPlannerService(FlightPlannerRepository flightPlannerRepository) {
         this.flightPlannerRepository = flightPlannerRepository;
@@ -121,15 +121,8 @@ public class FlightPlannerService {
                 .filter(flight -> flight.getDepartureTime().toLocalDate().equals(LocalDate.parse(searchFlightRequest.getDepartureTime())))
                 .collect(Collectors.toList());
 
-        int totalItems = flights.size();
-        int pageSize = 1;
-        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-        int page = Math.max(0, Math.min(totalPages - 1, currentPage));
-        int startIndex = page * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, totalItems);
-        List<Flight> paginatedFlights = flights.subList(startIndex, endIndex);
-        currentPage++;
-        return new PageResult<>(page, totalItems, paginatedFlights);
+
+        return new PageResult<>(0, flights.size(), flights);
     }
 
     public Flight searchFlightById(long id) {
