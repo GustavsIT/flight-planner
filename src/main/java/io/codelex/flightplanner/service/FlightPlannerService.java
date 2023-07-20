@@ -58,8 +58,9 @@ public class FlightPlannerService {
 
 
     private boolean validateAddFlightRequest(AddFlightRequest addFlightRequest) {
-        return validateAirports(addFlightRequest) && validateDateTime(addFlightRequest)
-                && addFlightRequest.getCarrier() != null && !addFlightRequest.getCarrier().isEmpty();
+        return validateAirports(addFlightRequest)
+                && validateDateTime(addFlightRequest);
+
     }
 
     private boolean flightAlreadyExists(AddFlightRequest addFlightRequest) {
@@ -82,8 +83,8 @@ public class FlightPlannerService {
     private boolean validateDateTime(AddFlightRequest addFlightRequest) {
         LocalDateTime departureTime = addFlightRequest.getDepartureTime();
         LocalDateTime arrivalTime = addFlightRequest.getArrivalTime();
-        if (departureTime.isAfter(arrivalTime)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid date and time: departure time is after arrival time");
+        if (departureTime.isAfter(arrivalTime)||departureTime.isEqual(arrivalTime)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid date and time: departure time is after/equals arrival time");
         }
         return true;
     }
