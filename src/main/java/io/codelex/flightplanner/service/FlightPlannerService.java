@@ -19,14 +19,14 @@ import java.util.stream.Stream;
 @Service
 public class FlightPlannerService {
     private FlightPlannerRepository flightPlannerRepository;
-    private long flightIdCounter =1;
+    private long flightIdCounter =0;
 
     public FlightPlannerService(FlightPlannerRepository flightPlannerRepository) {
         this.flightPlannerRepository = flightPlannerRepository;
     }
 
     public void clearAllFlights(){
-        flightPlannerRepository.getFlights().clear();
+        flightPlannerRepository.clear();
     }
 
     public synchronized Flight addFlight(AddFlightRequest addFlightRequest) {
@@ -35,7 +35,8 @@ public class FlightPlannerService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Flight already exists");
             }
             Flight newFlight = createFlight(addFlightRequest);
-            flightPlannerRepository.getFlights().add(newFlight);
+            newFlight.setId(generateFlightId());
+            flightPlannerRepository.addFlight(newFlight);
             return newFlight;
         }
         return null;
@@ -58,12 +59,14 @@ public class FlightPlannerService {
 
 
     private boolean validateAddFlightRequest(AddFlightRequest addFlightRequest) {
-        if (validateValues(addFlightRequest)
-                && validateAirports(addFlightRequest)
+        if (validateAirports(addFlightRequest)
                 && validateDateTime(addFlightRequest)
-                && flightAlreadyExists(addFlightRequest))
+                && flightAlreadyExists(addFlightRequest)) {
             return true;
-        else return false;
+        }
+        else {
+            return false;
+        }
     }
 
     private boolean flightAlreadyExists(AddFlightRequest addFlightRequest) {
@@ -98,24 +101,6 @@ public class FlightPlannerService {
 
         if (from.equals(to)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid, FROM and TO airports are the same!");
-        }
-        return true;
-    }
-
-    private boolean validateValues(AddFlightRequest addFlightRequest) {
-        if (addFlightRequest.getTo() == null
-                || addFlightRequest.getFrom() == null
-                || addFlightRequest.getCarrier() == null
-                || addFlightRequest.getDepartureTime() == null
-                || addFlightRequest.getArrivalTime() == null
-                || addFlightRequest.getFrom().getAirport() == null
-                || addFlightRequest.getFrom().getCity() == null
-                || addFlightRequest.getFrom().getCountry() == null
-                || addFlightRequest.getTo().getAirport() == null
-                || addFlightRequest.getTo().getCity() == null
-                || addFlightRequest.getTo().getCountry() == null
-        ) {
-            throw new NullPointerException("Null values cannot be in the flight request!");
         }
         return true;
     }

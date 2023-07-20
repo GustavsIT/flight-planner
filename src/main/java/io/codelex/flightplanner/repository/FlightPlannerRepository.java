@@ -19,6 +19,11 @@ public class FlightPlannerRepository {
     public void clear(){
         flightList.clear();
     }
+    public void addFlight(Flight flight){
+        flightList.add(flight);
+    }
+
+
 }
 
 
