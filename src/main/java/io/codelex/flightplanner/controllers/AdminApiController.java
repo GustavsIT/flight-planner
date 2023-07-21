@@ -24,6 +24,7 @@ public class AdminApiController {
         return flightPlannerService.addFlight(addFlightRequest);
     }
 
+
     @GetMapping("/flights/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable long id) {
         Flight flight = flightPlannerService.searchFlightById(id);

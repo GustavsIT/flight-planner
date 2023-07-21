@@ -30,15 +30,18 @@ public class FlightPlannerService {
     }
 
     public synchronized Flight addFlight(AddFlightRequest addFlightRequest) {
-        if (validateAddFlightRequest(addFlightRequest)) {
             if (flightAlreadyExists(addFlightRequest)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Flight already exists");
+            }
+            if(!validateAirports(addFlightRequest)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid, FROM and TO airports are the same!");
+            }
+            if(!validateDateTime(addFlightRequest)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid date and time: departure time is after/equals arrival time");
             }
             Flight newFlight = createFlight(addFlightRequest);
             flightPlannerRepository.addFlight(newFlight);
             return newFlight;
-        }
-        return null;
     }
 
     private Flight createFlight(AddFlightRequest addFlightRequest) {
@@ -56,11 +59,6 @@ public class FlightPlannerService {
         return flightIdCounter++;
     }
 
-
-    private boolean validateAddFlightRequest(AddFlightRequest addFlightRequest) {
-        return validateAirports(addFlightRequest)
-                && validateDateTime(addFlightRequest);
-    }
 
     private boolean flightAlreadyExists(AddFlightRequest addFlightRequest) {
         Airport from = addFlightRequest.getFrom();
@@ -83,7 +81,7 @@ public class FlightPlannerService {
         LocalDateTime departureTime = addFlightRequest.getDepartureTime();
         LocalDateTime arrivalTime = addFlightRequest.getArrivalTime();
         if (departureTime.isAfter(arrivalTime)||departureTime.isEqual(arrivalTime)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid date and time: departure time is after/equals arrival time");
+            return false;
         }
         return true;
     }
@@ -92,7 +90,7 @@ public class FlightPlannerService {
         String from = addFlightRequest.getFrom().getAirport().toLowerCase().trim();
         String to = addFlightRequest.getTo().getAirport().toLowerCase().trim();;
         if (from.equals(to)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid, FROM and TO airports are the same!");
+            return false;
         }
         return true;
     }
@@ -111,7 +109,7 @@ public class FlightPlannerService {
 
     public PageResult<Flight> searchFlights(SearchFlightRequest searchFlightRequest) {
         if (searchFlightRequest.getFrom().equals(searchFlightRequest.getTo())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FROM and TO airports cannot be the same!");
         }
         List<Flight> flights = flightPlannerRepository.getFlights().stream()
                 .filter(flight -> flight.getFrom().getAirport().equalsIgnoreCase(searchFlightRequest.getFrom()))
