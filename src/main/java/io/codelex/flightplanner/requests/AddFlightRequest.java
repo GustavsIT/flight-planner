@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class AddFlightRequest {
     @NotNull
@@ -64,5 +65,29 @@ public class AddFlightRequest {
 
     public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddFlightRequest that = (AddFlightRequest) o;
+        return Objects.equals(from, that.from) && Objects.equals(to, that.to) && Objects.equals(carrier, that.carrier) && Objects.equals(departureTime, that.departureTime) && Objects.equals(arrivalTime, that.arrivalTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, carrier, departureTime, arrivalTime);
+    }
+
+    @Override
+    public String toString() {
+        return "AddFlightRequest{" +
+                "from=" + from +
+                ", to=" + to +
+                ", carrier='" + carrier + '\'' +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                '}';
     }
 }

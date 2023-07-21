@@ -88,7 +88,7 @@ public class FlightPlannerService {
 
     private boolean validateAirports(AddFlightRequest addFlightRequest) {
         String from = addFlightRequest.getFrom().getAirport().toLowerCase().trim();
-        String to = addFlightRequest.getTo().getAirport().toLowerCase().trim();;
+        String to = addFlightRequest.getTo().getAirport().toLowerCase().trim();
         if (from.equals(to)) {
             return false;
         }
