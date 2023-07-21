@@ -60,7 +60,6 @@ public class FlightPlannerService {
     private boolean validateAddFlightRequest(AddFlightRequest addFlightRequest) {
         return validateAirports(addFlightRequest)
                 && validateDateTime(addFlightRequest);
-
     }
 
     private boolean flightAlreadyExists(AddFlightRequest addFlightRequest) {
@@ -92,7 +91,6 @@ public class FlightPlannerService {
     private boolean validateAirports(AddFlightRequest addFlightRequest) {
         String from = addFlightRequest.getFrom().getAirport().toLowerCase().trim();
         String to = addFlightRequest.getTo().getAirport().toLowerCase().trim();;
-
         if (from.equals(to)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid, FROM and TO airports are the same!");
         }
@@ -120,7 +118,6 @@ public class FlightPlannerService {
                 .filter(flight -> flight.getTo().getAirport().equalsIgnoreCase(searchFlightRequest.getTo()))
                 .filter(flight -> flight.getDepartureTime().toLocalDate().equals(LocalDate.parse(searchFlightRequest.getDepartureTime())))
                 .collect(Collectors.toList());
-
 
         return new PageResult<>(0, flights.size(), flights);
     }

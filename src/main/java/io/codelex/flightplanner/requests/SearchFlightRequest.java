@@ -10,7 +10,7 @@ public class SearchFlightRequest {
     @NotBlank
     private String to;
     @NotBlank
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private String departureTime;
 
     public SearchFlightRequest(String from, String to, String departureTime) {
