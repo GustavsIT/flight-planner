@@ -3,6 +3,7 @@ package io.codelex.flightplanner.controllers;
 import io.codelex.flightplanner.domain.Flight;
 import io.codelex.flightplanner.requests.AddFlightRequest;
 import io.codelex.flightplanner.service.FlightPlannerService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class AdminApiController {
 
     @PutMapping("/flights")
     @ResponseStatus(HttpStatus.CREATED)
-    public Flight addFlight(@RequestBody AddFlightRequest addFlightRequest) {
+    public Flight addFlight(@RequestBody @Valid AddFlightRequest addFlightRequest) {
         return flightPlannerService.addFlight(addFlightRequest);
     }
 

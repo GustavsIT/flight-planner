@@ -17,10 +17,10 @@ public class AddFlightRequest {
     private Airport to;
     @NotBlank
     private String carrier;
-
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime departureTime;
-    @NotBlank
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
 

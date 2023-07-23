@@ -2,7 +2,7 @@ package io.codelex.flightplanner.requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
-
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class SearchFlightRequest {
@@ -12,13 +12,13 @@ public class SearchFlightRequest {
     @NotBlank
     private String to;
     @NotBlank
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-    private String departureTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate departureDate;
 
-    public SearchFlightRequest(String from, String to, String departureTime) {
+    public SearchFlightRequest(String from, String to, LocalDate departureDate) {
         this.from = from;
         this.to = to;
-        this.departureTime = departureTime;
+        this.departureDate = departureDate;
     }
 
     public String getFrom() {
@@ -37,12 +37,12 @@ public class SearchFlightRequest {
         this.to = to;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    public LocalDate getDepartureDate() {
+        return departureDate;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 
     @Override
@@ -50,12 +50,12 @@ public class SearchFlightRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SearchFlightRequest that = (SearchFlightRequest) o;
-        return Objects.equals(from, that.from) && Objects.equals(to, that.to) && Objects.equals(departureTime, that.departureTime);
+        return Objects.equals(from, that.from) && Objects.equals(to, that.to) && Objects.equals(departureDate, that.departureDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(from, to, departureTime);
+        return Objects.hash(from, to, departureDate);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SearchFlightRequest {
         return "SearchFlightRequest{" +
                 "from='" + from + '\'' +
                 ", to='" + to + '\'' +
-                ", departureTime='" + departureTime + '\'' +
+                ", departureDate=" + departureDate +
                 '}';
     }
 }

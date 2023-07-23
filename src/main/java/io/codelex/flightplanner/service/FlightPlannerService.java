@@ -96,6 +96,7 @@ public class FlightPlannerService {
     }
 
 
+
     public List<Airport> searchAirport(String search) {
         String searchString = search.toLowerCase().trim();
         return flightPlannerRepository.getFlights().stream()
@@ -114,7 +115,7 @@ public class FlightPlannerService {
         List<Flight> flights = flightPlannerRepository.getFlights().stream()
                 .filter(flight -> flight.getFrom().getAirport().equalsIgnoreCase(searchFlightRequest.getFrom()))
                 .filter(flight -> flight.getTo().getAirport().equalsIgnoreCase(searchFlightRequest.getTo()))
-                .filter(flight -> flight.getDepartureTime().toLocalDate().equals(LocalDate.parse(searchFlightRequest.getDepartureTime())))
+                .filter(flight -> flight.getDepartureTime().toLocalDate().equals(searchFlightRequest.getDepartureDate()))
                 .collect(Collectors.toList());
 
         return new PageResult<>(0, flights.size(), flights);

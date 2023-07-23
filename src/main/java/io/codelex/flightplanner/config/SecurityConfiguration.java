@@ -15,8 +15,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.httpBasic(withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/testing-api/**", "/api/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/admin-api/flights").authenticated()
+                        .requestMatchers("/admin-api/flights/{flightId}").authenticated()
+                        .anyRequest().permitAll()
                 );
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
