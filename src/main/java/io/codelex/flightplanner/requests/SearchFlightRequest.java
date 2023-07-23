@@ -2,6 +2,8 @@ package io.codelex.flightplanner.requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -11,7 +13,7 @@ public class SearchFlightRequest {
     private String from;
     @NotBlank
     private String to;
-    @NotBlank
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate departureDate;
 

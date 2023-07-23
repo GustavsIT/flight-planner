@@ -109,7 +109,7 @@ public class FlightPlannerService {
     }
 
     public PageResult<Flight> searchFlights(SearchFlightRequest searchFlightRequest) {
-        if (searchFlightRequest.getFrom().equals(searchFlightRequest.getTo())) {
+        if (searchFlightRequest.getFrom().toLowerCase().trim().equals(searchFlightRequest.getTo().toLowerCase().trim())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FROM and TO airports cannot be the same!");
         }
         List<Flight> flights = flightPlannerRepository.getFlights().stream()
