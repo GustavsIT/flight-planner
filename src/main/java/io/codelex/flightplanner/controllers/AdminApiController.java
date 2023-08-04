@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @RestController
@@ -26,22 +27,19 @@ public class AdminApiController {
 
 
     @GetMapping("/flights/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable long id) {
+    public Flight getFlightById(@PathVariable long id) {
         Flight flight = flightPlannerService.searchFlightById(id);
-        if (flight == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(flight==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(flight, HttpStatus.OK);
+        return flight;
     }
 
+
     @DeleteMapping("/flights/{id}")
-    public ResponseEntity<Flight> deleteFlight(@PathVariable long id) {
-        Flight flightToDelete = flightPlannerService.searchFlightById(id);
-        if (flightToDelete == null) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteFlight(@PathVariable long id) {
         flightPlannerService.deleteFlightById(id);
-        return new ResponseEntity<>(flightToDelete, HttpStatus.OK);
     }
 
 

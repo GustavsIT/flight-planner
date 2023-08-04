@@ -29,23 +29,19 @@ public class CustomerApiController {
     }
 
     @PostMapping("/flights/search")
-    public ResponseEntity<PageResult<Flight>> searchFlights(@RequestBody @Valid SearchFlightRequest searchFlightRequest) {
-        try {
-            PageResult<Flight> result = flightPlannerService.searchFlights(searchFlightRequest);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (ResponseStatusException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public PageResult<Flight> searchFlights(@RequestBody @Valid SearchFlightRequest searchFlightRequest) {
+        return flightPlannerService.searchFlights(searchFlightRequest);
     }
 
 
     @GetMapping("/flights/{id}")
-    public ResponseEntity<Flight> getFlightById(@PathVariable long id) {
+    public Flight getFlightById(@PathVariable long id) {
         Flight flight = flightPlannerService.searchFlightById(id);
-        if (flight == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(flight==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(flight, HttpStatus.OK);
+        return flight;
     }
+
 }
 
