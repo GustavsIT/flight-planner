@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FlightPlannerConfiguration {
     @Bean
-    @ConditionalOnProperty(prefix ="flightPlanner", name="service.version", havingValue = "in-memory")
+    @ConditionalOnProperty(prefix ="flightplanner", name="service.version", havingValue = "in-memory")
     public FlightPlannerService getInMemoryVersion(FlightPlannerInMemoryRepository flightPlannerInMemoryRepository){
         return new FlightPlannerInMemoryService(flightPlannerInMemoryRepository);
     }
 
 
     @Bean
-    @ConditionalOnProperty(prefix = "flightPlanner", name = "service.version", havingValue = "database")
+    @ConditionalOnProperty(prefix = "flightplanner", name = "service.version", havingValue = "database")
     public FlightPlannerService getDatabaseVersion(FlightRepository flightRepository, AirportRepository airportRepository){
         return new FlightPlannerInDatabaseService(flightRepository, airportRepository);
     }
