@@ -1,19 +1,20 @@
 package io.codelex.flightplanner.controllers;
 
 import io.codelex.flightplanner.service.FlightPlannerInMemoryService;
+import io.codelex.flightplanner.service.FlightPlannerService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/testing-api")
 public class TestingApiController {
-    private final FlightPlannerInMemoryService flightPlannerInMemoryService;
+    private FlightPlannerService flightPlannerService;
 
-    public TestingApiController(FlightPlannerInMemoryService flightPlannerInMemoryService) {
-        this.flightPlannerInMemoryService = flightPlannerInMemoryService;
+    public TestingApiController(FlightPlannerService flightPlannerService) {
+        this.flightPlannerService = flightPlannerService;
     }
 
     @PostMapping("/clear")
     public void clearFlights(){
-        flightPlannerInMemoryService.clearAllFlights();
+        flightPlannerService.clearAllFlights();
     }
 }
