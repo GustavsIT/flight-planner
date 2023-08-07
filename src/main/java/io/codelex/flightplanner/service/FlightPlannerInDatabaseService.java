@@ -8,6 +8,7 @@ import io.codelex.flightplanner.requests.AddFlightRequest;
 import io.codelex.flightplanner.requests.SearchFlightRequest;
 import io.codelex.flightplanner.responses.PageResult;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ public class FlightPlannerInDatabaseService implements FlightPlannerService {
 
 
     @Override
+    @Transactional
     public void clearAllFlights() {
         flightRepository.deleteAll();
         airportRepository.deleteAll();
