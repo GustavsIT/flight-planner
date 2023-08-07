@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Objects;
 @Entity
-@Table(name = "airport")
+@Table(name = "airports")
 public class Airport {
     @NotBlank
     private String country;
